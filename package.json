@@ -1,0 +1,19 @@
+{
+  "name": "jcnodejs",
+  "version": "1.0.0",
+  "description": "Just Clean Nodejs App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varghesejjj/JCNode.git"
+  },
+  "author": "Varghese Siby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/varghesejjj/JCNode/issues"
+  },
+  "homepage": "https://github.com/varghesejjj/JCNode#readme"
+}
