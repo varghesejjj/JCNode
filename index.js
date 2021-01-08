@@ -12,12 +12,18 @@ const db = require("./models");
 db.sequelize.sync();
 
 
+
 //Middlewares
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//Routes
+//APIs
+const towerRoutes = require("./routes/tower.routes");
+
+//ROUTES
+app.use("/api", towerRoutes);
+
 
 
 //Set PORT to listen for requests
