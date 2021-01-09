@@ -1,5 +1,8 @@
 const router = require("express").Router();
 
+const http = require("http").createServer(router);
+const io = require("socket.io")(http);
+
 const db = require("../models");
 const Tower = db.towers;
 
@@ -30,18 +33,23 @@ router.post("/towers", [authJwt.verifyToken], (req, res) => {
   };
 
   //Saving the tower to the DB
-  Tower.create(tower).then((data) => {
-    res
-      .json({
+  Tower.create(tower)
+    .then((data) => {
+      res.json({
         success: true,
         tower: data,
-      })
-      .catch((err) => {
-        res.status(500).json({
-          success: false,
-          message: err.message,
-        });
       });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    });
+  io.on("connection", (socket) => {
+    socket.on("New Tower Created", (msg) => {
+      io.broadcast.emit("Tower Created", msg);
+    });
   });
 });
 
