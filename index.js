@@ -20,9 +20,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //APIs
 const towerRoutes = require("./routes/tower.routes");
+const authRoutes = require("./routes/auth.routes");
 
 //ROUTES
 app.use("/api", towerRoutes);
+app.use("/api", authRoutes);
+
 
 
 

@@ -1,12 +1,14 @@
 const router = require("express").Router();
 
-const { request } = require("express");
 const db = require("../models");
 const Tower = db.towers;
+
 const Op = db.Sequelize.Op;
 
+const { authJwt } = require("../middleware");
+
 // To create and save a new tower
-router.post("/towers", (req, res) => {
+router.post("/towers", [authJwt.verifyToken], (req, res) => {
   //Validating if the data exists
   if (!req.body.name) {
     res.status(500).json({
@@ -154,7 +156,7 @@ router.get("/towersearch", (req, res) => {
 });
 
 // Update tower based on id
-router.put("/towers/:id", (req, res) => {
+router.put("/towers/:id", [authJwt.verifyToken], (req, res) => {
   const id = req.params.id;
   const tower = {};
 
@@ -191,7 +193,7 @@ router.put("/towers/:id", (req, res) => {
 });
 
 //Delete particular tower based on id
-router.delete("/towers/:id", (req, res) => {
+router.delete("/towers/:id", [authJwt.verifyToken], (req, res) => {
   const id = req.params.id;
 
   Tower.destroy({
