@@ -65,7 +65,7 @@ router.post("/offices/:id", [authJwt.verifyToken], (req, res) => {
   };
   Office.create(office)
     .then((data) => {
-      Tower.findByPk(id).then((tower) => {
+      Tower.findByPk(id).then((tower) => {  // Updating the number of office of the tower
         if (tower) {
           var upoffices = tower.numberofoffices += 1
           tower.update({
