@@ -1,7 +1,7 @@
 # Just Clean Node App
 
 ## Prerequisites: 
-node, npm, postman(not necessary)
+node, npm, mysql postman(not necessary)
 
 
 ## How to run the application:
