@@ -244,6 +244,7 @@ router.put("/towers/:id", [authJwt.verifyToken], (req, res) => {
 router.delete("/towers/:id", [authJwt.verifyToken], (req, res) => {
   const id = req.params.id;
 
+  Office.destroy({where : {towerId: id}})
   Tower.destroy({
     where: { id: id },
   })
