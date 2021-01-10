@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Office = sequelize.define("comment", {
+  const Office = sequelize.define("Office", {
     name: {
       type: DataTypes.STRING
     },
@@ -11,5 +11,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  return Comment;
+  return Office;
 };

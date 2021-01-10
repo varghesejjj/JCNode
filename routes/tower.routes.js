@@ -5,6 +5,7 @@ const io = require("socket.io")(http);
 
 const db = require("../models");
 const Tower = db.towers;
+const Office = db.office;
 
 const Op = db.Sequelize.Op;
 
@@ -26,7 +27,7 @@ router.post("/towers", [authJwt.verifyToken], (req, res) => {
     name: req.body.name,
     location: req.body.location,
     floors: req.body.floors,
-    offices: req.body.offices,
+    numberofoffices: req.body.numberofoffices,
     rating: req.body.rating,
     latitude: req.body.latitude,
     longitude: req.body.longitude,
@@ -51,6 +52,43 @@ router.post("/towers", [authJwt.verifyToken], (req, res) => {
       io.broadcast.emit("Tower Created", msg);
     });
   });
+});
+
+//Create new office for tower
+router.post("/offices/:id", [authJwt.verifyToken], (req, res) => {
+  const id = req.params.id
+  const office = {
+    name: req.body.name,
+    branch: req.body.branch,
+    office_no: req.body.office_no,
+    towerId: id,
+  };
+  Office.create(office)
+    .then((data) => {
+      Tower.findByPk(id).then((tower) => {
+        if (tower) {
+          var upoffices = tower.numberofoffices += 1
+          tower.update({
+            numberofoffices: upoffices
+          })
+        }
+      }).catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: err.message,
+        });
+      })
+      res.json({
+        success: true,
+        office: data,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    });
 });
 
 // Helping function to do pagination, set number of pages and the number of items per page
@@ -91,14 +129,15 @@ router.get("/towers", (req, res) => {
   const { limit, offset } = getPagination(page, size);
 
   var condition = {};
-  if (showwithoffices) condition.offices = { [Op.gt]: -1 };
+  if (showwithoffices) condition.numberofoffices = { [Op.gt]: 0 };
   // Assuming that tower without offices will have number of offices as -1
   if (minoffices && maxoffices)
-    condition.offices = { [Op.between]: [minoffices, maxoffices] };
+    condition.numberofoffices = { [Op.between]: [minoffices, maxoffices] };
   if (location) condition.location = { [Op.like]: `%${location}%` };
 
   Tower.findAndCountAll({
     where: condition,
+    include: ["Office"],
     limit,
     offset,
     order: [[sortby, sort]],
@@ -122,7 +161,7 @@ router.get("/towers", (req, res) => {
 router.get("/towers/:id", (req, res) => {
   const id = req.params.id;
 
-  Tower.findByPk(id)
+  Tower.findByPk(id, { include: ["Office"] })
     .then((data) =>
       res.json({
         success: true,
@@ -148,7 +187,7 @@ router.get("/towersearch", (req, res) => {
     ],
   };
 
-  Tower.findAll({ where: condition })
+  Tower.findAll({ where: condition, include: ["Office"] })
     .then((data) =>
       res.json({
         success: true,
@@ -171,7 +210,8 @@ router.put("/towers/:id", [authJwt.verifyToken], (req, res) => {
   if (req.body.name) tower.name = req.body.name;
   if (req.body.location) tower.location = req.body.location;
   if (req.body.floors) tower.floors = req.body.floors;
-  if (req.body.offices) tower.offices = req.body.offices;
+  if (req.body.numberofoffices)
+    tower.numberofoffices = req.body.numberofoffices;
   if (req.body.rating) tower.rating = req.body.rating;
   if (req.body.latitude) tower.latitude = req.body.latitude;
   if (req.body.longitude) tower.longitude = req.body.longitude;

@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
       floors: {
         type: Sequelize.INTEGER
       },
-      offices: {
+      numberofoffices: {
         type: Sequelize.INTEGER
       },
       rating: {
