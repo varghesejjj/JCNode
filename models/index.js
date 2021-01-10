@@ -21,7 +21,15 @@ db.sequelize = sequelize;
 
 db.towers = require("./tower.model.js")(sequelize, Sequelize);
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
+db.office = require("./office.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
+
+
+db.towers.hasMany(db.office, { as: "Offices" });
+db.office.belongsTo(db.towers, {
+  foreignKey: "towerId",
+  as: "Tower",
+});
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
