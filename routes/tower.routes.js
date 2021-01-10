@@ -210,8 +210,6 @@ router.put("/towers/:id", [authJwt.verifyToken], (req, res) => {
   if (req.body.name) tower.name = req.body.name;
   if (req.body.location) tower.location = req.body.location;
   if (req.body.floors) tower.floors = req.body.floors;
-  if (req.body.numberofoffices)
-    tower.numberofoffices = req.body.numberofoffices;
   if (req.body.rating) tower.rating = req.body.rating;
   if (req.body.latitude) tower.latitude = req.body.latitude;
   if (req.body.longitude) tower.longitude = req.body.longitude;
