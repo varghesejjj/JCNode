@@ -27,7 +27,7 @@ router.post("/towers", [authJwt.verifyToken], (req, res) => {
     name: req.body.name,
     location: req.body.location,
     floors: req.body.floors,
-    numberofoffices: req.body.numberofoffices,
+    numberofoffices: 0,
     rating: req.body.rating,
     latitude: req.body.latitude,
     longitude: req.body.longitude,
